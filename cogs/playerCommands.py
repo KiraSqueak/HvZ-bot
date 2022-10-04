@@ -1,9 +1,8 @@
-from datetime import datetime
-from datetime import timedelta
-
-import asyncio
 import discord
 import json
+import asyncio
+from datetime import datetime
+from datetime import timedelta
 from discord.commands import slash_command
 from discord.ext import commands
 
@@ -14,16 +13,21 @@ def onlyMods(ctx):
     return modRole in ctx.author.roles
 
 
-slash_command_guilds = [925123755175460865, 709206749378248716, 960997598594994186]
+#slash_command_guilds = [925123755175460865, 709206749378248716, 960997598594994186]
 
 
 class playerCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
+        print("Loaded playerCommands")
+
+    @commands.command()
+    async def test(self):
+        print("tested")
 
     # Allows the user to bite another player
-    @slash_command(guild_ids=slash_command_guilds, name="bite", description="Bites a certain user.")
-    async def bite(self, ctx, ID, fed: discord.Member = None):
+    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="bite", description="Bites a certain user.")
+    async def bite(self, ctx, playerid, fed: discord.Member = None):
         with open('players.json', 'r') as f:
             save = json.load(f)
         with open('data.json', 'r') as f:
@@ -39,7 +43,7 @@ class playerCommands(commands.Cog):
 
         # Loops through the players in players.json and finds the ID
         for player in save:
-            if str(ID) == save[player]['ID']:
+            if str(playerid) == save[player]['ID']:
                 if save[player]["Role"] == "Zombie":  # Makes sure target is not already a zombie
                     await ctx.send("They are already a zombie.")
                     return
@@ -83,7 +87,7 @@ class playerCommands(commands.Cog):
         # If the user was not found then the ID was invalid
         await ctx.respond("That is an invalid ID.")
 
-    @slash_command(guild_ids=slash_command_guilds, name="stun", description="stuns a zombie.")
+    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="stun", description="stuns a zombie.")
     async def stun(self, ctx, stunned: discord.Member = None):
         with open('players.json', 'r') as f:
             players = json.load(f)
@@ -124,7 +128,7 @@ class playerCommands(commands.Cog):
             await ctx.respond(f"The zombie stunned by {ctx.author.display_name} is no longer stunned.")
 
     # Send the user information about themselves
-    @slash_command(guild_ids=slash_command_guilds, name="identity_crisis", description="Resend you ID.")
+    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="identity_crisis", description="Resend you ID.")
     async def identityCrisis(self, ctx):
         with open('players.json', 'r') as f:
             save = json.load(f)
@@ -150,7 +154,7 @@ class playerCommands(commands.Cog):
             await ctx.author.send(embed=playerEmbed)
 
     # Returns a specified upgrade or returns the list of upgrades
-    @slash_command(guild_ids=slash_command_guilds, name="upgrade_lookup", description="Looks up information about a specified upgrade.")
+    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="upgrade_lookup", description="Looks up information about a specified upgrade.")
     async def upgradeLookup(self, ctx, *, upgrade="Get List"):
         with open('upgrades.json', 'r', encoding='utf-8') as f:
             upgrades = json.load(f)
@@ -174,7 +178,8 @@ class playerCommands(commands.Cog):
             await ctx.respond("That's not an upgrade. Please try again, or don't that's up to you.")
 
     # returns all rules that
-    @slash_command(guild_ids=slash_command_guilds, name="rule_lookup", description="Looks up information about any rule with the keyword.")
+    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="rule_lookup",
+                    description="Looks up information about any rule with the keyword.")
     async def ruleLookup(self, ctx, *, keyword="Get List"):
         with open('rules.json', 'r') as f:
             rules = json.load(f)

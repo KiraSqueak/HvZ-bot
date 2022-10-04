@@ -15,6 +15,7 @@ def onlyMods(ctx):
 class playerData(commands.Cog):
     def __init__(self, client):
         self.client = client
+        print("Loaded player Data")
 
     # Prints all registered users
     @commands.command()
@@ -52,7 +53,7 @@ class playerData(commands.Cog):
     # Mod bites the user with the ID, no points are earned.
     @commands.command()
     @commands.check(onlyMods)
-    async def modBite(self, ctx, ID):
+    async def modBite(self, ctx, playerid):
         with open('players.json', 'r') as f:
             save = json.load(f)
         with open('data.json', 'r') as f:
@@ -60,7 +61,7 @@ class playerData(commands.Cog):
 
         # Searches through the players.json file for the correct ID
         for player in save:
-            if str(ID) == save[player]['ID']:
+            if str(playerid) == save[player]['ID']:
                 if save[player]["Role"] == "Zombie":  # Makes sure the user in not already a zombie
                     await ctx.send("They are already a zombie.")
                     return

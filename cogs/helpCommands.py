@@ -1,4 +1,4 @@
-import discord
+import discord, json
 from discord.commands import slash_command
 from discord.ext import commands
 
@@ -6,6 +6,7 @@ from discord.ext import commands
 class helpCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
+        print("loaded help file")
 
     # Returns a list of commands available
     @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="help", description="Sends the user a list of commands.")

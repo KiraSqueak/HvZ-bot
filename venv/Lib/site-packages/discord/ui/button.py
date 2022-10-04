@@ -25,27 +25,26 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Callable, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, Union
 import inspect
 import os
+from typing import TYPE_CHECKING, Callable, Optional, Tuple, Type, TypeVar, Union
 
-
-from .item import Item, ItemCallbackType
+from ..components import Button as ButtonComponent
 from ..enums import ButtonStyle, ComponentType
 from ..partial_emoji import PartialEmoji, _EmojiTag
-from ..components import Button as ButtonComponent
+from .item import Item, ItemCallbackType
 
 __all__ = (
-    'Button',
-    'button',
+    "Button",
+    "button",
 )
 
 if TYPE_CHECKING:
-    from .view import View
     from ..emoji import Emoji
+    from .view import View
 
-B = TypeVar('B', bound='Button')
-V = TypeVar('V', bound='View', covariant=True)
+B = TypeVar("B", bound="Button")
+V = TypeVar("V", bound="View", covariant=True)
 
 
 class Button(Item[V]):
@@ -77,12 +76,12 @@ class Button(Item[V]):
     """
 
     __item_repr_attributes__: Tuple[str, ...] = (
-        'style',
-        'url',
-        'disabled',
-        'label',
-        'emoji',
-        'row',
+        "style",
+        "url",
+        "disabled",
+        "label",
+        "emoji",
+        "row",
     )
 
     def __init__(
@@ -97,8 +96,15 @@ class Button(Item[V]):
         row: Optional[int] = None,
     ):
         super().__init__()
+        if label and len(str(label)) > 80:
+            raise ValueError("label must be 80 characters or fewer")
+        if custom_id is not None and len(str(custom_id)) > 100:
+            raise ValueError("custom_id must be 100 characters or fewer")
         if custom_id is not None and url is not None:
-            raise TypeError('cannot mix both url and custom_id with Button')
+            raise TypeError("cannot mix both url and custom_id with Button")
+
+        if not isinstance(custom_id, str) and custom_id is not None:
+            raise TypeError(f"expected custom_id to be str, not {custom_id.__class__.__name__}")
 
         self._provided_custom_id = custom_id is not None
         if url is None and custom_id is None:
@@ -113,7 +119,7 @@ class Button(Item[V]):
             elif isinstance(emoji, _EmojiTag):
                 emoji = emoji._to_partial()
             else:
-                raise TypeError(f'expected emoji to be str, Emoji, or PartialEmoji not {emoji.__class__}')
+                raise TypeError(f"expected emoji to be str, Emoji, or PartialEmoji not {emoji.__class__}")
 
         self._underlying = ButtonComponent._raw_construct(
             type=ComponentType.button,
@@ -146,8 +152,9 @@ class Button(Item[V]):
     @custom_id.setter
     def custom_id(self, value: Optional[str]):
         if value is not None and not isinstance(value, str):
-            raise TypeError('custom_id must be None or str')
-
+            raise TypeError("custom_id must be None or str")
+        if value and len(value) > 100:
+            raise ValueError("custom_id must be 100 characters or fewer")
         self._underlying.custom_id = value
 
     @property
@@ -158,7 +165,7 @@ class Button(Item[V]):
     @url.setter
     def url(self, value: Optional[str]):
         if value is not None and not isinstance(value, str):
-            raise TypeError('url must be None or str')
+            raise TypeError("url must be None or str")
         self._underlying.url = value
 
     @property
@@ -177,6 +184,8 @@ class Button(Item[V]):
 
     @label.setter
     def label(self, value: Optional[str]):
+        if value and len(str(value)) > 80:
+            raise ValueError("label must be 80 characters or fewer")
         self._underlying.label = str(value) if value is not None else value
 
     @property
@@ -186,15 +195,14 @@ class Button(Item[V]):
 
     @emoji.setter
     def emoji(self, value: Optional[Union[str, Emoji, PartialEmoji]]):  # type: ignore
-        if value is not None:
-            if isinstance(value, str):
-                self._underlying.emoji = PartialEmoji.from_str(value)
-            elif isinstance(value, _EmojiTag):
-                self._underlying.emoji = value._to_partial()
-            else:
-                raise TypeError(f'expected str, Emoji, or PartialEmoji, received {value.__class__} instead')
-        else:
+        if value is None:
             self._underlying.emoji = None
+        elif isinstance(value, str):
+            self._underlying.emoji = PartialEmoji.from_str(value)
+        elif isinstance(value, _EmojiTag):
+            self._underlying.emoji = value._to_partial()
+        else:
+            raise TypeError(f"expected str, Emoji, or PartialEmoji, received {value.__class__} instead")
 
     @classmethod
     def from_component(cls: Type[B], button: ButtonComponent) -> B:
@@ -274,17 +282,17 @@ def button(
 
     def decorator(func: ItemCallbackType) -> ItemCallbackType:
         if not inspect.iscoroutinefunction(func):
-            raise TypeError('button function must be a coroutine function')
+            raise TypeError("button function must be a coroutine function")
 
         func.__discord_ui_model_type__ = Button
         func.__discord_ui_model_kwargs__ = {
-            'style': style,
-            'custom_id': custom_id,
-            'url': None,
-            'disabled': disabled,
-            'label': label,
-            'emoji': emoji,
-            'row': row,
+            "style": style,
+            "custom_id": custom_id,
+            "url": None,
+            "disabled": disabled,
+            "label": label,
+            "emoji": emoji,
+            "row": row,
         }
         return func
 

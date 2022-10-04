@@ -12,6 +12,7 @@ def onlyMods(ctx):
 class pointsCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
+        print("Loaded points Commands")
 
     # Adds points to the specified team
     @commands.command()
