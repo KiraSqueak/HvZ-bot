@@ -31,6 +31,7 @@ class registration(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def register(self, ctx):
+        await ctx.send("Beginning the registration of players!")
         save = {}
         for member in ctx.guild.members:
             # Adds the three roles that should be ignored by shitbot
@@ -53,6 +54,8 @@ class registration(commands.Cog):
                     await member.send(f"Your ID is: {id}")
                 except:
                     print(f"Failed sending ID to {member.display_name}")
+
+            print(f"Registered {member.display_name}")
 
         with open('players.json', 'w') as f:
             json.dump(save, f, indent=4)

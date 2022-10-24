@@ -15,7 +15,6 @@ def onlyMods(ctx):
 class playerData(commands.Cog):
     def __init__(self, client):
         self.client = client
-        print("Loaded player Data")
 
     # Prints all registered users
     @commands.command()

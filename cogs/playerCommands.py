@@ -19,7 +19,6 @@ def onlyMods(ctx):
 class playerCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
-        print("Loaded playerCommands")
 
     @commands.command()
     async def test(self):
@@ -96,9 +95,13 @@ class playerCommands(commands.Cog):
         if players[str(ctx.author.id)]["Role"] == "Zombie":
             await ctx.respond("Only humans can stun.")
             return
+        # Check to make sure the user is not a zombie
+        if players[str(stunned.id)]["Role"] == "Human":
+            await ctx.respond("You can't stun a human.")
+            return
 
         # Gives the author a point
-        players[ctx.author.id]["Points"] += 1
+        players[str(ctx.author.id)]["Points"] += 1
         with open('players.json', 'w') as f:
             json.dump(players, f, indent=4)
 

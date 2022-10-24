@@ -32,6 +32,9 @@ class Events(commands.Cog):
         if "how are you" in message.content.lower() and "shitbot" in message.content.lower():
             general_channel = self.client.get_channel(message.channel.id)
             await general_channel.send("Better than you.")
+        if "ID" in message.content and random.randint(0, 10) == 5:
+            general_channel = self.client.get_channel(message.channel.id)
+            await general_channel.send("***NO***")
         if random.randint(0, 500) == -225:
             general_channel = self.client.get_channel(message.channel.id)
             special = ["I have a question.", "Urgent situation!", "There is a flaw in your logic.",
@@ -39,7 +42,7 @@ class Events(commands.Cog):
                        "How long till you die I wonder?",
                        "May all your teeth fall out but one so you may still get a tooth ache.",
                        "May you be so rich your widow's husband never has to work a day.",
-                       "May you have the most comfortable mattress and on thousand sleepless nights.",
+                       "May you have the most comfortable mattress and one thousand sleepless nights.",
                        "Stay healthy so you can kill yourself later.", "Let him suffer and remember.",
                        "Dumkopf", "May you be so enamored of good food that you turn into a mouse, and may your enemy "
                                   "turn into a cat, and may he eat you up and choke on you, so we can be rid of you "

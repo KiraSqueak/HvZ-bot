@@ -38,6 +38,7 @@ async def checkStarve():
     getTime = datetime.now()
     date_format = '%m/%d/%Y %H:%M:%S'
     curTime = getTime.strftime(date_format).split()
+    print(f"Beginning Check {curTime}")
 
     with open('players.json', 'r') as f:
         players = json.load(f)
@@ -63,6 +64,10 @@ async def checkStarve():
     with open('players.json', 'w') as f:
         json.dump(players, f, indent=4)
 
+    getTime = datetime.now()
+    date_format = '%m/%d/%Y %H:%M:%S'
+    curTime = getTime.strftime(date_format).split()
+    print(f"Check Complete {curTime}")
 
 @bot.event
 async def on_ready():
