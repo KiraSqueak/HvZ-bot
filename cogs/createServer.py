@@ -3,7 +3,6 @@ import json
 import random
 import string
 from discord.ext import commands
-from discord.commands import slash_command
 
 
 class createServer(commands.Cog):
@@ -11,7 +10,5 @@ class createServer(commands.Cog):
         self.client = client
 
 
-
-
-def setup(client):
-    client.add_cog(createServer(client))
+async def setup(client):
+    await client.add_cog(createServer(client))

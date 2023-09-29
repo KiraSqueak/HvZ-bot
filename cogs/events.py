@@ -50,5 +50,5 @@ class Events(commands.Cog):
             await general_channel.send(random.choice(special))
 
 
-def setup(client):
-    client.add_cog(Events(client))
+async def setup(client):
+    await client.add_cog(Events(client))

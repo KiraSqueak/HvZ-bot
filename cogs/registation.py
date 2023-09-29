@@ -49,6 +49,7 @@ class registration(commands.Cog):
                                    "Points": 0}
                 role = discord.utils.get(ctx.author.guild.roles, name="Human")
                 await member.add_roles(role)
+
                 # Attempts to send the id to the user, may fail if the used does not accept DMs from people in the same guild
                 try:
                     await member.send(f"Your ID is: {id}")
@@ -102,5 +103,5 @@ class registration(commands.Cog):
         await ctx.send("All data cleared.")
 
 
-def setup(client):
-    client.add_cog(registration(client))
+async def setup(client):
+    await client.add_cog(registration(client))

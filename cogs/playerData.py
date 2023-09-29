@@ -186,5 +186,5 @@ class playerData(commands.Cog):
         await ctx.send(f"Upgrade {upgrade.title()} has been added to {member.display_name}")
 
 
-def setup(client):
-    client.add_cog(playerData(client))
+async def setup(client):
+    await client.add_cog(playerData(client))

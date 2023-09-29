@@ -1,1 +1,42 @@
-{}
+{
+    "185273939621052416": {
+        "Name": "madrocketdoc",
+        "ID": "1BBPH",
+        "Role": "Zombie",
+        "Upgrade": "",
+        "Starve Timer": "10/01/2023 13:15:14",
+        "Points": 0
+    },
+    "442769641383657472": {
+        "Name": "Aaeihrrhyyhnnhe/erm",
+        "ID": "65P69",
+        "Role": "Human",
+        "Upgrade": "",
+        "Starve Timer": -1,
+        "Points": 0
+    },
+    "493602958164885504": {
+        "Name": "Gyosei",
+        "ID": "KSAM5",
+        "Role": "Human",
+        "Upgrade": "",
+        "Starve Timer": -1,
+        "Points": 0
+    },
+    "626589761775075348": {
+        "Name": "_Jordan_",
+        "ID": "AC5AJ",
+        "Role": "Human",
+        "Upgrade": "",
+        "Starve Timer": -1,
+        "Points": 0
+    },
+    "830844742660784129": {
+        "Name": "PiperJ",
+        "ID": "0VL12",
+        "Role": "Human",
+        "Upgrade": "",
+        "Starve Timer": -1,
+        "Points": 0
+    }
+}

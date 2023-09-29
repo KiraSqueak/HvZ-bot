@@ -1,5 +1,4 @@
 import discord, json
-from discord.commands import slash_command
 from discord.ext import commands
 
 
@@ -8,7 +7,7 @@ class helpCommands(commands.Cog):
         self.client = client
 
     # Returns a list of commands available
-    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="help", description="Sends the user a list of commands.")
+    @commands.command()
     async def help(self, ctx):
         modRole = discord.utils.get(ctx.author.guild.roles, name="Moderator/character")
         if modRole in ctx.author.roles:
@@ -28,12 +27,23 @@ class helpCommands(commands.Cog):
             myEmbed.add_field(name="Display Points", value="Displays the current points for both teams. Format: $displayPoints", inline=False)
             myEmbed.set_author(name="Shitbot")
             await ctx.author.send(embed=myEmbed)
-            await ctx.respond("Check your DMs.")
+            await ctx.send("Check your DMs.")
         else:
-            await ctx.respond("All commands are slash commands.")
+            myEmbed = discord.Embed(title="Mod Command List", description="<> = required field    [] = optional field",
+                                    color=0x800080)
+            myEmbed.add_field(name="Bite", value="Bites a human. Format: $bite <user ID> [mention user to feed]",
+                              inline=False)
+            myEmbed.add_field(name="Stun", value="Stuns a zombie. Format: $stun [mention user stunned]",
+                              inline=False)
+            myEmbed.add_field(name="Identity Crisis", value="Sends you your ID again. Format: $identityCrisis",
+                              inline=False)
+            myEmbed.add_field(name="Upgrade Lookup", value="Looks up the description of an upgrade. Format: $upgradeLookup [name of upgrade]",
+                              inline=False)
+            myEmbed.set_author(name="Shitbot")
+            await ctx.send(embed=myEmbed)
 
-def setup(client):
-    client.add_cog(helpCommands(client))
 
-# Make shitbot sometimes repost a message in a random other place
+async def setup(client):
+    await client.add_cog(helpCommands(client))
+
 # Send DM's to people randomly telling them to go to a specific location

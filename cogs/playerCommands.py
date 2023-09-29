@@ -3,7 +3,6 @@ import json
 import asyncio
 from datetime import datetime
 from datetime import timedelta
-from discord.commands import slash_command
 from discord.ext import commands
 
 
@@ -21,11 +20,11 @@ class playerCommands(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def test(self):
+    async def test(self, ctx):
         print("tested")
 
     # Allows the user to bite another player
-    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="bite", description="Bites a certain user.")
+    @commands.command()
     async def bite(self, ctx, playerid, fed: discord.Member = None):
         with open('players.json', 'r') as f:
             save = json.load(f)
@@ -34,17 +33,17 @@ class playerCommands(commands.Cog):
 
         # Checks to make sure the author is not a human or a starved zombie
         if save[str(ctx.author.id)]["Role"] == "Human":
-            await ctx.respond("You are a human, humans do not bite people.")
+            await ctx.send("You are a human, humans do not bite people.")
             return
         if save[str(ctx.author.id)]["Starve Timer"] == "Starved":
-            await ctx.respond("Starved zombies may not bite humans.")
+            await ctx.send("Starved zombies may not bite humans.")
             return
 
         # Loops through the players in players.json and finds the ID
         for player in save:
             if str(playerid) == save[player]['ID']:
                 if save[player]["Role"] == "Zombie":  # Makes sure target is not already a zombie
-                    await ctx.send("They are already a zombie.")
+                    await ctx.send("They are already a zombie, your bite does nothing.")
                     return
 
                 member = await ctx.guild.fetch_member(int(player))
@@ -66,7 +65,7 @@ class playerCommands(commands.Cog):
                 role = discord.utils.get(ctx.author.guild.roles, name="Zombie")
                 await member.add_roles(role)
 
-                await ctx.respond(f"{member.display_name} has been bitten!")
+                await ctx.send(f"{member.display_name} has been bitten!")
 
                 # If a user is specified to be fed then set that zombie's starve timer for the future date
                 if fed:
@@ -84,20 +83,20 @@ class playerCommands(commands.Cog):
                     json.dump(points, f, indent=4)
                 return
         # If the user was not found then the ID was invalid
-        await ctx.respond("That is an invalid ID.")
+        await ctx.send("That is an invalid ID.")
 
-    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="stun", description="stuns a zombie.")
+    @commands.command()
     async def stun(self, ctx, stunned: discord.Member = None):
         with open('players.json', 'r') as f:
             players = json.load(f)
 
         # Check to make sure the user is not a zombie
         if players[str(ctx.author.id)]["Role"] == "Zombie":
-            await ctx.respond("Only humans can stun.")
+            await ctx.send("Only humans can stun.")
             return
         # Check to make sure the user is not a zombie
         if players[str(stunned.id)]["Role"] == "Human":
-            await ctx.respond("You can't stun a human.")
+            await ctx.send("You can't stun a human.")
             return
 
         # Gives the author a point
@@ -114,24 +113,24 @@ class playerCommands(commands.Cog):
 
         # If the user specified someone to be stunned they will be notified when their starve timer is up
         if stunned is not None:
-            await ctx.respond(f"{stunned.display_name} has been stunned.")
+            await ctx.send(f"{stunned.display_name} has been stunned.")
 
             await asyncio.sleep(600)
-            if players[players[str(ctx.author.id)]["Upgrade"] == "Bruiser"]:  # If the user has the Bruiser upgrade double time
+            if players[str(ctx.author.id)]["Upgrade"] == "Bruiser":  # If the user has the Bruiser upgrade double time
                 await asyncio.sleep(600)
 
-            await ctx.respond(f"{stunned.display_name} is no longer stunned.")
+            await ctx.send(f"{stunned.display_name} is no longer stunned.")
         else:  # If no user is specified then send a general message
-            await ctx.respond("A zombie has been stunned.")
+            await ctx.send("A zombie has been stunned.")
 
             await asyncio.sleep(600)
-            if players[players[str(ctx.author.id)]["Upgrade"] == "Bruiser"]:  # If the user has the Bruiser upgrade double time
+            if players[str(ctx.author.id)]["Upgrade"] == "Bruiser":  # If the user has the Bruiser upgrade double time
                 await asyncio.sleep(600)
 
-            await ctx.respond(f"The zombie stunned by {ctx.author.display_name} is no longer stunned.")
+            await ctx.send(f"The zombie stunned by {ctx.author.display_name} is no longer stunned.")
 
     # Send the user information about themselves
-    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="identity_crisis", description="Resend you ID.")
+    @commands.command()
     async def identityCrisis(self, ctx):
         with open('players.json', 'r') as f:
             save = json.load(f)
@@ -145,7 +144,7 @@ class playerCommands(commands.Cog):
                                                     f"**Starve Timer**: {info['Starve Timer']}")
             if ctx.author.avatar is not None:  # Checks that the user has a profile picture before setting that for the embed
                 playerEmbed.set_thumbnail(url=ctx.author.avatar)
-            await ctx.respond("Your info has been sent to your DMs.")
+            await ctx.send("Your info has been sent to your DMs.")
             await ctx.author.send(embed=playerEmbed)
         else:
             playerEmbed = discord.Embed(title=f"Data for {info['Name']}", description=f"**ID**: {info['ID']}\n"
@@ -153,11 +152,11 @@ class playerCommands(commands.Cog):
                                                                                       f"**Upgrade**: {info['Upgrade']}")
             if ctx.author.avatar is not None:  # Checks that the user has a profile picture before setting that for the embed
                 playerEmbed.set_thumbnail(url=ctx.author.avatar)
-            await ctx.respond("Your info has been sent to your DMs.")
+            await ctx.send("Your info has been sent to your DMs.")
             await ctx.author.send(embed=playerEmbed)
 
     # Returns a specified upgrade or returns the list of upgrades
-    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="upgrade_lookup", description="Looks up information about a specified upgrade.")
+    @commands.command()
     async def upgradeLookup(self, ctx, *, upgrade="Get List"):
         with open('upgrades.json', 'r', encoding='utf-8') as f:
             upgrades = json.load(f)
@@ -170,25 +169,24 @@ class playerCommands(commands.Cog):
                 result += f"{i + 1}. {key.title()} \n"
 
             myEmbed = discord.Embed(title="The upgrades you can look up are:", description=result, color=0x800080)
-            myEmbed.set_footer(text="Use /upgrade_lookup [Name of upgrade] to see the description.")
-            await ctx.respond(embed=myEmbed)
+            myEmbed.set_footer(text="Use $upgradeLookup [Name of upgrade] to see the description.")
+            await ctx.send(embed=myEmbed)
             return
 
         if upgrade.lower() in upgrades:
             myEmbed = discord.Embed(title=upgrade.title(), description=upgrades[upgrade.lower()], color=0x800080)
-            await ctx.respond(embed=myEmbed)
+            await ctx.send(embed=myEmbed)
         else:
-            await ctx.respond("That's not an upgrade. Please try again, or don't that's up to you.")
+            await ctx.send("That's not an upgrade. Please try again, or don't that's up to you.")
 
     # returns all rules that
-    @slash_command(guild_ids=[925123755175460865, 709206749378248716, 960997598594994186], name="rule_lookup",
-                    description="Looks up information about any rule with the keyword.")
+    @commands.command()
     async def ruleLookup(self, ctx, *, keyword="Get List"):
         with open('rules.json', 'r') as f:
             rules = json.load(f)
 
-        await ctx.respond("This command has not yet been implemented. Want to help? DM Kira.")
+        await ctx.send("This command has not yet been implemented. Want to help? DM Kira.")
 
 
-def setup(client):
-    client.add_cog(playerCommands(client))
+async def setup(client):
+    await client.add_cog(playerCommands(client))
