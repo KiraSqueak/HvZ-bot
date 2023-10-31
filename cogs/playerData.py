@@ -22,15 +22,18 @@ class playerData(commands.Cog):
     async def printy(self, ctx):
         with open('players.json', 'r') as f:
             save = json.load(f)
-        await ctx.send("Sending all users data:")
-        for info in save:
-            playerEmbed = discord.Embed(title=f"Data for {save[info]['Name']}",
-                                        description=f"**ID**: {save[info]['ID']}\n"
-                                                    f"**Role**: {save[info]['Role']}\n"
-                                                    f"**Upgrade**: {save[info]['Upgrade']}\n"
-                                                    f"**Starve Timer**: {save[info]['Starve Timer']}\n"
-                                                    f"**Points**: {save[info]['Points']}")
-            await ctx.send(embed=playerEmbed)
+        if len(save) > 0:
+            await ctx.send("Sending all users data:")
+            for info in save:
+                playerEmbed = discord.Embed(title=f"Data for {save[info]['Name']}",
+                                            description=f"**ID**: {save[info]['ID']}\n"
+                                                        f"**Role**: {save[info]['Role']}\n"
+                                                        f"**Upgrade**: {save[info]['Upgrade']}\n"
+                                                        f"**Starve Timer**: {save[info]['Starve Timer']}\n"
+                                                        f"**Points**: {save[info]['Points']}")
+                await ctx.send(embed=playerEmbed)
+        else:
+            await ctx.send("There are no players registered.")
 
     # Gets the data of a specified user
     @commands.command()

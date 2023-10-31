@@ -98,5 +98,3 @@ if __name__ == '__main__':
 
     asyncio.run(main())
 
-#await wait_until_ready.start()
-#bot.run("OTI1OTU5NTE4MjM0NDc2NjI1.GurD_q.yc2x4vOozLTSFJsOcpJS4Is_0JAsPSMV2vEGxE")

@@ -16,7 +16,8 @@ class registration(commands.Cog):
         self.client = client
 
     # Generates a random id for the player
-    async def generateNumber(self):
+    @staticmethod
+    async def generateNumber():
         with open('players.json', 'r') as f:
             save = json.load(f)
         chars = string.ascii_uppercase + string.digits
@@ -40,7 +41,7 @@ class registration(commands.Cog):
             BotRole = discord.utils.get(ctx.author.guild.roles, name="Bot")
             # If the role of the user is not one of the roles to be ignored then register them
             if modRole not in member.roles and NPCRole not in member.roles and BotRole not in member.roles:
-                id = await self.generateNumber() # Generates a unique id for the user
+                id = await self.generateNumber()  # Generates a unique id for the user
                 save[member.id] = {'Name': member.display_name,
                                    'ID': id,
                                    'Role': 'Human',
@@ -50,13 +51,14 @@ class registration(commands.Cog):
                 role = discord.utils.get(ctx.author.guild.roles, name="Human")
                 await member.add_roles(role)
 
-                # Attempts to send the id to the user, may fail if the used does not accept DMs from people in the same guild
+                # Attempts to send the id to the user,
+                # may fail if the used does not accept DMs from people in the same guild
                 try:
                     await member.send(f"Your ID is: {id}")
                 except:
                     print(f"Failed sending ID to {member.display_name}")
 
-            print(f"Registered {member.display_name}")
+                print(f"Registered {member.display_name}")
 
         with open('players.json', 'w') as f:
             json.dump(save, f, indent=4)
@@ -69,6 +71,10 @@ class registration(commands.Cog):
     async def induct(self, ctx, member: discord.Member = None):
         with open('players.json', 'r') as f:
             save = json.load(f)
+
+        if member is None:
+            await ctx.send("Please mention a user to induct them.")
+            return
 
         id = await self.generateNumber()  # Generate the user a random ID
         save[member.id] = {'Name': member.display_name,
