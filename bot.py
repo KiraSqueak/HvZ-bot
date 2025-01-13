@@ -89,7 +89,7 @@ async def load_extentions():
 async def main():
     wait_until_ready.start()
     print("bot is up and running.")
-    await bot.start("OTI1OTU5NTE4MjM0NDc2NjI1.GurD_q.yc2x4vOozLTSFJsOcpJS4Is_0JAsPSMV2vEGxE")
+    await bot.start("")
 
 
 
