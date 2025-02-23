@@ -35,7 +35,7 @@ class registration(commands.Cog):
         await ctx.send("Beginning the registration of players!")
         save = {}
         for member in ctx.guild.members:
-            # Adds the three roles that should be ignored by shitbot
+            # Adds the three roles that should be ignored by Hvzbot
             modRole = discord.utils.get(ctx.author.guild.roles, name="Moderator/character")
             NPCRole = discord.utils.get(ctx.author.guild.roles, name="NPC")
             BotRole = discord.utils.get(ctx.author.guild.roles, name="Bot")
