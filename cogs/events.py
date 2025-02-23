@@ -26,7 +26,7 @@ class Events(commands.Cog):
     async def on_message(self, message):
         if message.author.id == 784421124779933707:
             return
-        if "shitbot" in message.content.lower() and random.randint(0, 10) == 5:
+        if "hvzbot" in message.content.lower() and random.randint(0, 10) == 5:
             general_channel = self.client.get_channel(message.channel.id)
             await general_channel.send("*Peeks around corner.*")
         if "how are you" in message.content.lower() and "shitbot" in message.content.lower():
