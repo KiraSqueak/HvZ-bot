@@ -25,7 +25,7 @@ class helpCommands(commands.Cog):
             myEmbed.add_field(name="Add Player Points", value="Adds points the the specified player. Format: $addPlayerPoints <mention user> <number of points>",inline=False)
             myEmbed.add_field(name="Remove Player Points", value="Removes points the the specified player. Format: $removePlayerPoints <mention user> <number of points>", inline=False)
             myEmbed.add_field(name="Display Points", value="Displays the current points for both teams. Format: $displayPoints", inline=False)
-            myEmbed.set_author(name="Shitbot")
+            myEmbed.set_author(name="Hvzbot")
             await ctx.author.send(embed=myEmbed)
             await ctx.send("Check your DMs.")
         else:
@@ -39,7 +39,7 @@ class helpCommands(commands.Cog):
                               inline=False)
             myEmbed.add_field(name="Upgrade Lookup", value="Looks up the description of an upgrade. Format: $upgradeLookup [name of upgrade]",
                               inline=False)
-            myEmbed.set_author(name="Shitbot")
+            myEmbed.set_author(name="Hvzbot")
             await ctx.send(embed=myEmbed)
 
 
